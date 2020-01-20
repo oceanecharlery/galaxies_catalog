@@ -3,6 +3,15 @@ Groupe composé de Océane Charlery, Sereyvuth Chum et Emilie Daongam. Projet de
 
 ## Données
 
+### Propriétés de l'objet
+- id
+- nom
+- type (nébuleuse, amas, galaxie...)
+- constellation
+- catalogue d'origine ?
+- image ?
+ 
+
 ## Intérêt scientifique
 
 ## Fonctionnalités
