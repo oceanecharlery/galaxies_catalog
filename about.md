@@ -7,10 +7,12 @@ Groupe composé de Océane Charlery, Sereyvuth Chum et Emilie Daongam. Projet de
 
 #### Informations générales
 - id (qui permet de faire le lien entre le numéro dans le catalogue de Messier et le numéro dans le catalogue NGC du même objet)
+- code (numéro dans le catalogue)
 - nom
 - type (nébuleuse, amas, galaxie...)
 - sous-type (Amas ouverts, Amas globulaires, Galaxies spirales, Galaxies lenticulaires, Galaxies elliptiques, Galaxies régulières, Nébuleuses planétaires, Nébuleuses diffuses, Vestiges de Supernova)
 - constellation
+- courbe de rotation (si galaxie spirale)
 - image
 
 ___
@@ -26,6 +28,8 @@ ___
 ___
 #### Données d’astrométrie
 - Distance
+___
+Indiquer la complétude des données
 
 ## Intérêt scientifique
 Mettre à disposition un vaste catalogue scientifique sur le ciel profond croisant plusieurs sources de données.
