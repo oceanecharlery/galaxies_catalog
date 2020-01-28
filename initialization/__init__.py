@@ -4,11 +4,12 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 engine = db.create_engine('sqlite:///galaxies.db?check_same_thread=False')
 connection = engine.connect()
 metadata = db.MetaData()
-objects = db.Table('messier', metadata, autoload=True, autoload_with=engine)
+messier = db.Table('messier', metadata, autoload=True, autoload_with=engine)
+db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False,bind=engine))
 
-class Objects:
+class Messier:
     def __init__(self):
-        pass
+        metadata.create_all(bind=engine)
 
     def all(self):
         query = db.select([messier])
