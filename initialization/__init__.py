@@ -46,6 +46,10 @@ class Messier:
         query = db.select([messier]).where(messier.c.constellation_latin == category)
         return self.query(query)
 
+    def getByRightAscension(self,category) :
+        query = db.select([messier]).where(messier.c.right_ascension == category)
+        return self.query(query)
+
     def getByDiscoverer(self,category) :
         query = db.select([messier]).where(messier.c.discoverer == category)
         return self.query(query)

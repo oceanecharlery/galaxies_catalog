@@ -60,7 +60,14 @@ class Test(Resource):
 @api.route("/galaxies/constellation_latin/<category>")
 class Test(Resource):
     def get(self,category):
-        res = messier.getByConstellationLatin(category)
+        res = messier.getByRrightAscension(category)
+        print(res)
+        return jsonify(res)
+
+@api.route("/galaxies/right_ascension/<category>")
+class Test(Resource):
+    def get(self,category):
+        res = messier.getByRightAscension(category)
         print(res)
         return jsonify(res)
 
