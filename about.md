@@ -54,3 +54,45 @@ Sources :
 
 
 ## Technologies
+
+
+
+
+# Réponse d'un GET sur Insomnia : localhost/galaxies/messier/M42
+Dans un exemple d'objet json récupéré avec Insomnia: localhost/galaxies messier/M42
+{
+  "data": [
+    {
+      "constellation": "Ori",
+      "constellation_en": "Orion, Hunter",
+      "constellation_fr": "Orion",
+      "constellation_latin": "Orion",
+      "declinaison": "-05:23:22.8",
+      "discoverer": "Peiresc",
+      "distance": "1500",
+      "image_url_1": "http://www.lasam.ca/messier/M042.JPG",
+      "image_url_2": "https://www.datastro.eu/api/v2/catalog/datasets/catalogue-de-messier/files/90397cbe3746fedbf7f3fe98dd95c2f2",
+      "magnitude": "4",
+      "messier": "M42",
+      "ngc": "NGC 9176",
+      "object_type": "Emission Nebula / Nébuleuse à émission",
+      "right_ascension": "05:35:16.48",
+      "season": "Winter / Hiver",
+      "size": "30,0'",
+      "year": "1610"
+    }
+  ]
+}
+
+On a la possibilité d'identifier les catégories importantes.
+A partir de cela, j'ai créé les routes.
+Pour cela on a choisi :
+- constellation (category)
+- constellation_en (category)
+- constellation_fr (category)
+- constellation_latin (category)
+- discover (category)
+- messier (id)
+- ngc (category)
+- object_type (category)
+- season (category)
