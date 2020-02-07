@@ -12,7 +12,7 @@ Desactivate Venv
 deactivate
 
 ## Run Api
-python main.py App running on http://0.0.0.0:80/ et Utiliser Insomnia
+python main.py App running on http://0.0.0.0/index et Utiliser Insomnia
 
 
 ## Activer Venv environnement
@@ -21,9 +21,6 @@ source ./venv/bin/activate
 ## Déactiver Venv environnement
 deactivate
 
-
-## Install dependecies
-pip3 install -r requirements.txt
 
 ## Contributor
 Sereyvuth CHUM - Océane CHARLERY - Emilie DAONGAM
