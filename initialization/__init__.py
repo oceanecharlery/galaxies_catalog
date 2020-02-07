@@ -9,9 +9,11 @@ db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False,bind=
 
 class Messier:
     def __init__(self):
+        # query should be called before any other method to create proxy connection
         metadata.create_all(bind=engine)
 
     def all(self):
+        # so basically all this code should be executed first, then additional methods to fetch specific data
         query = db.select([messier])
         ResultProxy = connection.execute(query)
         ResultSet = ResultProxy.fetchall()
