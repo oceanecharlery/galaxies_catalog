@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, make_response, request 
 from flask_restplus import Api, Resource
 
 #from initialization import Objects 
@@ -12,12 +12,11 @@ messier = Messier()
 
 ##DEBUT CREATION DES ROUTES 
 
-@api.route("/")
+@api.route("/index")
 class Test(Resource):
     def get(self):
-        res = messier.all()
-        print(res)
-        return render_template('index.html')
+        headers = {'content-type': 'text/html'}
+        return make_response(render_template('index.html'), 200,headers)
 
 
 
@@ -73,10 +72,10 @@ class Test(Resource):
         return jsonify(res)
 
 
-@api.route("/galaxies/ngc/<category>")
+@api.route("/galaxies/ngc/<id>")
 class Test(Resource):
     def get(self,category):
-        res = messier.getByNGC(category)
+        res = messier.getByNGC(id)
         print(res)
         return jsonify(res)
 

@@ -47,17 +47,17 @@ class Messier:
         return self.query(query)
 
     def getByDiscoverer(self,category) :
-        query = db.select([messier]).where(messier.c.messier == category)
+        query = db.select([messier]).where(messier.c.discoverer == category)
         return self.query(query)
 
-    def getByNGC(self,category) :
-        query = db.select([messier]).where(messier.c.messier == category)
+    def getByNGC(self,id) :
+        query = db.select([messier]).where(messier.c.ngc == id)
         return self.query(query)
 
     def getByObject_Type(self,category) :
-        query = db.select([messier]).where(messier.c.messier == category)
+        query = db.select([messier]).where(messier.c.objectType == category)
         return self.query(query)
 
     def getBySeason(self,category) :
-        query = db.select([messier]).where(messier.c.messier == category)
+        query = db.select([messier]).where(messier.c.season == category)
         return self.query(query)
