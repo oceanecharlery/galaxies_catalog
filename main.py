@@ -35,6 +35,13 @@ class Test(Resource):
         return jsonify(res)
 
 
+@api.route("/galaxies/ngc/<ngc>")
+class Test(Resource):
+    def get(self,ngc):
+        res = messier.getByNGC(ngc)
+        print(res)
+        return jsonify(res)
+
 @api.route("/galaxies/constellation/<category>")
 class Test(Resource):
     def get(self,category):
@@ -75,14 +82,6 @@ class Test(Resource):
 class Test(Resource):
     def get(self,category):
         res = messier.getByDiscoverer(category)
-        print(res)
-        return jsonify(res)
-
-
-@api.route("/galaxies/ngc/<id>")
-class Test(Resource):
-    def get(self,category):
-        res = messier.getByNGC(id)
         print(res)
         return jsonify(res)
 

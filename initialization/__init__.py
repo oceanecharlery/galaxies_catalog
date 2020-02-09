@@ -54,8 +54,8 @@ class Messier:
         query = db.select([messier]).where(messier.c.discoverer == category)
         return self.query(query)
 
-    def getByNGC(self,id) :
-        query = db.select([messier]).where(messier.c.ngc == id)
+    def getByNGC(self,ngc) :
+        query = db.select([messier]).where(messier.c.ngc == ngc)
         return self.query(query)
 
     def getByObject_Type(self,category) :
