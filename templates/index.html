@@ -44,6 +44,9 @@
 							<option value="disco">
 								Discoverer
 							</option>
+							<option value="right_ascension">
+								Right Ascension
+							</option>
 						</select>
 					</div>
 					<input type="text" class="form-control" id="input_text" />
@@ -71,7 +74,7 @@
 					<th>Constellation EN</th>
 					<th>Constellation FR</th>
 					<th>Constellation LATIN</th>
-					<th>Right ascenssion</th>
+					<th>Right Ascension</th>
 					<th>Declinaison</th>
 					<th>Distance</th>
 					<th>Size</th>
@@ -140,13 +143,15 @@
 				input_text.placeholder = "Exemple : M42"
 			} else if (selected == "ngc") {
 				input_text.placeholder = "Exemple : NGC 2447"
+			} else if (selected == "right_ascension") {
+				input_text.placeholder = "Exemple : 12:25:24.11"
 			}
 		}
 
 		let updateSelection = () => {
 			let selected = select_type.options[select_type.selectedIndex].value
 
-			if (selected == "messier" || selected == "ngc") {
+			if (selected == "messier" || selected == "ngc" || selected == "right_ascension") {
 				document.querySelector("#input_min").style.display = "none"
 				document.querySelector("#input_max").style.display = "none"
 				document.querySelector("#input_text").style.display = "block"
@@ -236,7 +241,7 @@
 					document.querySelector("#nbItems").innerHTML=data.length
 					let str = ""
 					for (let i = 0; i < data.length; i++) {
-						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].rightAscension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
 					}
 					table.innerHTML = str
 				})
@@ -247,7 +252,7 @@
 					document.querySelector("#nbItems").innerHTML=data.length
 					let str = ""
 					for (let i = 0; i < data.length; i++) {
-						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].rightAscension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
 					}
 					table.innerHTML = str
 				})
@@ -258,7 +263,7 @@
 					document.querySelector("#nbItems").innerHTML=data.length
 					let str = ""
 					for (let i = 0; i < data.length; i++) {
-						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].rightAscension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
 					}
 					table.innerHTML = str
 				})
@@ -269,7 +274,7 @@
 					document.querySelector("#nbItems").innerHTML=data.length
 					let str = ""
 					for (let i = 0; i < data.length; i++) {
-						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].rightAscension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
 					}
 					table.innerHTML = str
 				})
@@ -281,7 +286,7 @@
 					document.querySelector("#nbItems").innerHTML=data.length
 					let str = ""
 					for (let i = 0; i < data.length; i++) {
-						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].rightAscension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
 					}
 					table.innerHTML = str
 				})
@@ -294,7 +299,7 @@
 					document.querySelector("#nbItems").innerHTML=data.length
 					let str = ""
 					for (let i = 0; i < data.length; i++) {
-						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].rightAscension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
 					}
 					table.innerHTML = str
 				})
@@ -307,7 +312,18 @@
 					document.querySelector("#nbItems").innerHTML=data.length
 					let str = ""
 					for (let i = 0; i < data.length; i++) {
-						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].rightAscension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+					}
+					table.innerHTML = str
+				})
+			} else if (selected == "right_ascension") {
+				axios.get("/galaxies/right_ascension/" + input_text.value).then(res => {
+					data = res.data.data
+					console.log(data)
+					document.querySelector("#nbItems").innerHTML=data.length
+					let str = ""
+					for (let i = 0; i < data.length; i++) {
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
 					}
 					table.innerHTML = str
 				})

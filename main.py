@@ -96,7 +96,6 @@ class Test(Resource):
 
 @api.route("/galaxies/season/<path:category>")
 class Test(Resource):
-    #category = request.args.get('username')
     def get(self,category):
         res = messier.getBySeason(category)
         print(res)
