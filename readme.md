@@ -4,23 +4,37 @@ To install the required packages run the following command (to use this you will
 ```
 pip install -r requirements.txt
 ```
+(the virtualenv must be activated before running this command)
 
 
-## Activer environnement
-source ./venv/bin/activate
-Desactivate Venv
+## Using the virtual environment
+
+Creating a virtualenv
+```
+virtualenv -p python3 envname
+```
+
+Activating the environment
+```
+source ./envname/bin/activate
+```
+
+Deactivating the environment
+```
 deactivate
+````
 
-## Run Api
-python main.py App running on http://0.0.0.0/index et Utiliser Insomnia
+## Runing the API
+To run the project : 
 
+Run the main.py file, this will start the server in development mode.
+```
+python3 main.py
+```
 
-## Activer Venv environnement
-source ./venv/bin/activate
+To request the API use a REST Client (ex: Insomnia) or use the interface directly built on top of the API that runs on http://0.0.0.0/index
 
-## Déactiver Venv environnement
-deactivate
 
 
 ## Contributor
-Sereyvuth CHUM - Océane CHARLERY - Emilie DAONGAM
+Océane CHARLERY - Sereyvuth CHUM - Emilie DAONGAM
