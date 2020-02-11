@@ -65,3 +65,13 @@ class Messier:
     def getBySeason(self,category) :
         query = db.select([messier]).where(messier.c.season == category)
         return self.query(query)
+
+    def getByDeclinaison(self, category) : 
+        query = db.select([messier]).where(messier.c.declinaison == category)
+        return self.query(query)
+
+    def getByMagnitude(self, min, max) : 
+        #min = kwargs.get('min', None)
+        #max = kwargs.get('max', None)
+        query = db.select([messier]).where(messier.c.magnitude.between(min, max))
+        return self.query(query)

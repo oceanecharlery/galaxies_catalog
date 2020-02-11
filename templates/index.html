@@ -13,10 +13,10 @@
 				font-size: 8pt !important;
 			}
 		</style>
-		<title>API</title>
+		<title>Catalogue de Messier - API</title>
 	</head>
 	<body>
-		<h1 class="text-center">API</h1>
+		<h1 class="text-center">Catalogue de Messier</h1>
 
 		<form>
 			<div class="mx-auto" style="width: 38rem;">
@@ -24,10 +24,10 @@
 					<div class="input-group-prepend">
 						<select class="input-group-text" id="select_type">
 							<option value="messier" selected>
-								Id de Messier
+								Messier (id)
 							</option>
 							<option value="ngc">
-								Id ngc
+								NGC (id)
 							</option>
 							<option value="dist">
 								Distance
@@ -43,6 +43,9 @@
 							</option>
 							<option value="disco">
 								Discoverer
+							</option>
+							<option value="declinaison">
+								Declinaison
 							</option>
 							<option value="right_ascension">
 								Right Ascension
@@ -148,13 +151,15 @@
 				input_text.placeholder = "Exemple : NGC 2447"
 			} else if (selected == "right_ascension") {
 				input_text.placeholder = "Exemple : 12:25:24.11"
+			} else if (selected == "declinaison") {
+				input_text.placeholder = "Exemple : +41:16:08.6"
 			}
 		}
 
 		let updateSelection = () => {
 			let selected = select_type.options[select_type.selectedIndex].value
 
-			if (selected == "messier" || selected == "ngc" || selected == "right_ascension" || selected == "constellation_en") {
+			if (selected == "messier" || selected == "ngc" || selected == "right_ascension" || selected == "constellation_en" || selected == "declinaison") {
 				document.querySelector("#input_min").style.display = "none"
 				document.querySelector("#input_max").style.display = "none"
 				document.querySelector("#input_text").style.display = "block"
@@ -332,6 +337,17 @@
 				})
 			} else if (selected == "constellation_en") {
 				axios.get("/galaxies/constellation_en/" + input_text.value).then(res => {
+					data = res.data.data
+					console.log(data)
+					document.querySelector("#nbItems").innerHTML=data.length
+					let str = ""
+					for (let i = 0; i < data.length; i++) {
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+					}
+					table.innerHTML = str
+				})
+			} else if (selected == "declinaison") {
+				axios.get("/galaxies/declinaison/" + input_text.value).then(res => {
 					data = res.data.data
 					console.log(data)
 					document.querySelector("#nbItems").innerHTML=data.length

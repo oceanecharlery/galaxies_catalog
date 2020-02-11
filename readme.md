@@ -1,6 +1,6 @@
-# Installation requirements
+# Installation Guide
 
-To install the required packages run the following command (to use this you will need pip or pip3 on mac) : 
+To install the required packages run the following command (to use this you will need a recent version of pip or pip3 on mac) : 
 ```
 pip install -r requirements.txt
 ```
@@ -22,7 +22,7 @@ source ./envname/bin/activate
 Deactivating the environment
 ```
 deactivate
-````
+```
 
 ## Runing the API
 To run the project : 
@@ -36,5 +36,5 @@ To request the API use a REST Client (ex: Insomnia) or use the interface directl
 
 
 
-## Contributor
+## Contributors
 Océane CHARLERY - Sereyvuth CHUM - Emilie DAONGAM

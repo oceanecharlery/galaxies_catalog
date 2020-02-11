@@ -78,6 +78,13 @@ class Test(Resource):
         print(res)
         return jsonify(res)
 
+@api.route("/galaxies/declinaison/<category>")
+class Test(Resource):
+    def get(self,category):
+        res = messier.getByDeclinaison(category)
+        print(res)
+        return jsonify(res)
+
 @api.route("/galaxies/discoverer/<category>")
 class Test(Resource):
     def get(self,category):
@@ -98,6 +105,13 @@ class Test(Resource):
 class Test(Resource):
     def get(self,category):
         res = messier.getBySeason(category)
+        print(res)
+        return jsonify(res)
+
+@api.route("/galaxies/magnitude/<path:min>/<path:max>")
+class Test(Resource):
+    def get(self,min, max):
+        res = messier.getByMagnitude(min, max)
         print(res)
         return jsonify(res)
 
