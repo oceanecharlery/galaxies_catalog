@@ -34,7 +34,7 @@ class Messier:
         query = db.select([messier]).where(messier.c.constellation == category)
         return self.query(query)
 
-    def getByConstellationEn(self,category) :
+    def getByConstellationEN(self,category) :
         query = db.select([messier]).where(messier.c.constellation_en == category)
         return self.query(query)
 

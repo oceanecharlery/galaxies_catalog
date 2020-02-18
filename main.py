@@ -52,14 +52,14 @@ class Test(Resource):
 @api.route("/galaxies/constellation_en/<category>")
 class Test(Resource):
     def get(self,category):
-        res = messier.getByConstellationEn(category)
+        res = messier.getByConstellationEN(category)
         print(res)
         return jsonify(res)
 
 @api.route("/galaxies/constellation_fr/<category>")
 class Test(Resource):
     def get(self,category):
-        res = messier.getByConstellationFr(category)
+        res = messier.getByConstellationFR(category)
         print(res)
         return jsonify(res)
 
@@ -67,7 +67,7 @@ class Test(Resource):
 @api.route("/galaxies/constellation_latin/<category>")
 class Test(Resource):
     def get(self,category):
-        res = messier.getByRrightAscension(category)
+        res = messier.getByConstellationLATIN(category)
         print(res)
         return jsonify(res)
 
