@@ -22,6 +22,14 @@ table {
     border: none;
 }
 
+thead {
+    font-size: 10pt !important;
+}
+
+tbody {
+    font-size: 8pt !important;
+}
+
 table th {
     color : white;
     background-color: #3B3AA4 !important;

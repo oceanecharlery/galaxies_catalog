@@ -10,6 +10,8 @@ messier = Messier()
 
 
 
+# API Routes for object queries
+
 @api.route("/index")
 class Messier(Resource):
     def get(self):
