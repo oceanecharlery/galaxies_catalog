@@ -12,6 +12,11 @@ form select {
     border-radius : 0 0 30px 30px;
 }
 
+table {
+    border-collapse: collapse;
+    border: none;
+}
+
 table th {
     color : #626066;
     background-color: #BAC5E0 !important;
@@ -24,4 +29,12 @@ table tr:nth-child(even){
 table tr{
     background-color: white;
     border: none;
+}
+
+tr a {
+    padding: 5px;
+    background-color: darkgrey;
+    border-radius: 5px;
+    color: white;
+    text-transform: lowercase;
 }
