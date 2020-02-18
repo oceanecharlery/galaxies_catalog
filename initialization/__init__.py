@@ -3,7 +3,6 @@ import sqlalchemy as db
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 engine = db.create_engine('sqlite:///galaxies.db?check_same_thread=False')
-###engine = db.create_engine('sqlite:///galaxies.sqlite') 
 connection = engine.connect()
 metadata = db.MetaData()
 messier = db.Table('messier', metadata, autoload=True, autoload_with=engine)
@@ -58,8 +57,8 @@ class Messier:
         query = db.select([messier]).where(messier.c.ngc == ngc)
         return self.query(query)
 
-    def getByObject_Type(self,category) :
-        query = db.select([messier]).where(messier.c.objectType == category)
+    def getByObjectType(self,category) :
+        query = db.select([messier]).where(messier.c.object_type == category)
         return self.query(query)
 
     def getBySeason(self,category) :
