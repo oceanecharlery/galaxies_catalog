@@ -1,3 +1,4 @@
+import os
 import sqlalchemy as db
 from sqlalchemy.orm import scoped_session, sessionmaker
 
@@ -9,12 +10,77 @@ db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False,bind=
 
 class Messier:
     def __init__(self):
-        # query should be called before any other method to create proxy connection
-        metadata.create_all(bind=engine)
+        pass
+
+
+    def query(self,query):
+        ResultProxy = connection.execute(query)
+        ResultSet = ResultProxy.fetchall()
+        return {"data" : [dict(row) for row in ResultSet]}
 
     def all(self):
-        # so basically all this code should be executed first, then additional methods to fetch specific data
         query = db.select([messier])
         ResultProxy = connection.execute(query)
         ResultSet = ResultProxy.fetchall()
         return {"data" : [dict(row) for row in ResultSet]}
+
+
+    def getByMessier(self,id) :
+        query = db.select([messier]).where(messier.c.messier == id)
+        return self.query(query)
+
+    def getByConstellation(self,category) :
+        query = db.select([messier]).where(messier.c.constellation == category)
+        return self.query(query)
+
+    def getByConstellationEN(self,category) :
+        query = db.select([messier]).where(messier.c.constellation_en == category)
+        return self.query(query)
+
+    def getByConstellationFR(self,category) :
+        query = db.select([messier]).where(messier.c.constellation_fr == category)
+        return self.query(query)
+
+    def getByConstellationLATIN(self,category) :
+        query = db.select([messier]).where(messier.c.constellation_latin == category)
+        return self.query(query)
+
+    def getByRightAscension(self,category) :
+        query = db.select([messier]).where(messier.c.right_ascension == category)
+        return self.query(query)
+
+    def getByDiscoverer(self,category) :
+        query = db.select([messier]).where(messier.c.discoverer == category)
+        return self.query(query)
+
+    def getByNGC(self,ngc) :
+        query = db.select([messier]).where(messier.c.ngc == ngc)
+        return self.query(query)
+
+    def getByObjectType(self,category) :
+        query = db.select([messier]).where(messier.c.object_type == category)
+        return self.query(query)
+
+    def getBySeason(self,category) :
+        query = db.select([messier]).where(messier.c.season == category)
+        return self.query(query)
+
+    def getByDeclinaison(self, category) : 
+        query = db.select([messier]).where(messier.c.declinaison == category)
+        return self.query(query)
+
+    def getByYear(self, min, max) : 
+        query = db.select([messier]).where(messier.c.year.between(min, max))
+        return self.query(query)
+
+    def getByMagnitude(self, min, max) : 
+        query = db.select([messier]).where(messier.c.magnitude.between(min, max))
+        return self.query(query)
+
+    def getByDistance(self, min, max) : 
+        query = db.select([messier]).where(messier.c.distance.between(min, max))
+        return self.query(query)
+    
+    def getBySize(self, size) : 
+        query = db.select([messier]).where(messier.c.size == size)
+        return self.query(query)     

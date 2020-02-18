@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+		<link rel="stylesheet" href="./static/styles/index.css" />
+		<style>
+			thead {
+				font-size: 10pt !important;
+			}
+			tbody {
+				font-size: 8pt !important;
+			}
+		</style>
+		<title>Catalogue de Messier - API</title>
+	</head>
+	<body>
+		<h1>Catalogue Messier</h1>
+		<p class="description">Cette API permet de requêter et filtrer les 110 objets composant le catalogue de Messier par propriété.</p>
+
+		<form>
+			<div class="mx-auto" style="width: 38rem;">
+				<div class="input-group p-3">
+					<div class="input-group-prepend">
+						<select class="input-group-text" id="select_type">
+							<option value="messier" selected>
+								Messier (ID)
+							</option>
+							<option value="ngc">
+								NGC (ID)
+							</option>
+							<option value="dist">
+								Distance
+							</option>
+							<option value="mag">
+								Magnitude
+							</option>
+							<option value="otype">
+								Object Type
+							</option>
+							<option value="season">
+								Season
+							</option>
+							<option value="disco">
+								Discoverer
+							</option>
+							<option value="declinaison">
+								Declinaison
+							</option>
+							<option value="right_ascension">
+								Right Ascension
+							</option>
+							<option value="constellation_en">
+								Constellation EN
+							</option>
+							<option value="constellation_fr">
+								Constellation FR
+							</option>
+							<option value="constellation_latin">
+								Constellation Latin
+							</option>
+							<option value="year">
+								Year of discovery
+							</option>
+							<option value="size">
+								Size
+							</option>
+						</select>
+					</div>
+					<input type="text" class="form-control" id="input_text" />
+					<input type="number" class="form-control" id="input_min" placeholder="min" />
+					<input type="number" class="form-control" id="input_max" placeholder="max" />
+					<select class="form-control" id="input_cat"></select>
+					<div class="input-group-append">
+						<button id="button" class="btn btn-primary text-white" type="button">Search</button>
+					</div>
+					<div class="input-group-append">
+						<button id="clear" class="btn btn-secondary text-white" type="button">Clear</button>
+					</div>
+				</div>
+				<div class="card-body">Number of displayed items : <b id="nbItems"></b></div>
+			</div>
+		</form>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Messier</th>
+					<th>NGC</th>
+					<th>Object type</th>
+					<th>Season</th>
+					<th>Magnitude</th>
+					<th>Constellation EN</th>
+					<th>Constellation FR</th>
+					<th>Constellation LATIN</th>
+					<th>Right Ascension</th>
+					<th>Declinaison</th>
+					<th>Distance</th>
+					<th>Size</th>
+					<th>Discoverer</th>
+					<th>Year</th>
+					<th>Show image</th>
+					<th>Download image</th>
+					<th>Constellation</th>
+				</tr>
+			</thead>
+			<tbody id="table"></tbody>
+		</table>
+	</body>
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+	<script>
+		let button = document.querySelector("#button")
+		let clear = document.querySelector("#clear")
+		let select_type = document.querySelector("#select_type")
+		let select_cat = document.querySelector("#input_cat")
+		let input_text = document.querySelector("#input_text")
+		let input_min = document.querySelector("#input_min")
+		let input_max = document.querySelector("#input_max")
+
+		button.addEventListener(
+			"click",
+			event => {
+				event.preventDefault()
+				search()
+			},
+			false
+		)
+
+		clear.addEventListener(
+			"click",
+			event => {
+				event.preventDefault()
+				document.querySelector("#input_min").value = ""
+				document.querySelector("#input_max").value = ""
+				document.querySelector("#input_text").value = ""
+				search()
+			},
+			false
+		)
+
+		select_type.addEventListener(
+			"change",
+			event => {
+				document.querySelector("#input_min").value = ""
+				document.querySelector("#input_max").value = ""
+				document.querySelector("#input_text").value = ""
+				updatePlaceholder()
+				updateSelection()
+				updateSelector()
+			},
+			false
+		)
+
+		let updatePlaceholder = () => {
+			let selected = select_type.options[select_type.selectedIndex].value
+
+			if (selected == "messier") {
+				input_text.placeholder = "Exemple : M42"
+			} else if (selected == "ngc") {
+				input_text.placeholder = "Exemple : NGC 2447"
+			} else if (selected == "right_ascension") {
+				input_text.placeholder = "Exemple : 12:25:24.11"
+			} else if (selected == "declinaison") {
+				input_text.placeholder = "Exemple : +41:16:08.6"
+			} else if (selected == "constellation_fr") {
+				input_text.placeholder = "Exemple : Chevelure de Berenice"
+			} else if(selected ==  "constellation_en" ) {
+				input_text.placeholder = "Hair of Berenice"
+			} else if(selected == "constellation_latin") {
+				input_text.placeholder = "Coma Berenices"
+			} else if(selected == "size") {
+				input_text.placeholder = "Exemple : 12,0' x 7,6' "
+			}
+		}
+
+		let updateSelection = () => {
+			let selected = select_type.options[select_type.selectedIndex].value
+
+			if (selected == "messier" || selected == "ngc" || selected == "right_ascension" || selected == "constellation_en" 
+			|| selected == "declinaison" || selected == "constellation_fr" || selected == "constellation_latin" || selected == "size") {
+				document.querySelector("#input_min").style.display = "none"
+				document.querySelector("#input_max").style.display = "none"
+				document.querySelector("#input_text").style.display = "block"
+				document.querySelector("#input_cat").style.display = "none"
+			} else if (selected == "dist" || selected == "mag" || selected == "year") {
+				document.querySelector("#input_min").style.display = "block"
+				document.querySelector("#input_max").style.display = "block"
+				document.querySelector("#input_text").style.display = "none"
+				document.querySelector("#input_cat").style.display = "none"
+			} else {
+				document.querySelector("#input_min").style.display = "none"
+				document.querySelector("#input_max").style.display = "none"
+				document.querySelector("#input_text").style.display = "none"
+				document.querySelector("#input_cat").style.display = "block"
+			}
+		}
+
+		let updateSelector = () => {
+			let selected = select_type.options[select_type.selectedIndex].value
+			if (selected == "season") {
+				str = ""
+				str += '<option value="winter">Winter / Hiver</option>'
+				str += '<option value="autumn">Autumn / Automne</option>'
+				str += '<option value="summer">Summer / Été</option>'
+				str += '<option value="spring">Spring / Printemps</option>'
+				document.querySelector("#input_cat").innerHTML = str
+			} else if (selected == "disco") {
+				str = ""
+				str += '<option value="bode">Bode</option>'
+				str += '<option value="bevis">Bévis</option>'
+				str += '<option value="casssini">Cassini</option>'
+				str += '<option value="cheseaux">Chéseaux</option>'
+				str += '<option value="darquier">Darquier</option>'
+				str += '<option value="flamsteed">Flamsteed</option>'
+				str += '<option value="halley">Halley</option>'
+				str += '<option value="hevelius">Hevelius</option>'
+				str += '<option value="hodierna">Hodierna</option>'
+				str += '<option value="ihle">Ihle</option>'
+				str += '<option value="kirch">Kirch</option>'
+				str += '<option value="koehler">Koehler</option>'
+				str += '<option value="lacaille">Lacaille</option>'
+				str += '<option value="gentil">Le Gentil</option>'
+				str += '<option value="mairan">Mairan</option>'
+				str += '<option value="maraldi">Maraldi</option>'
+				str += '<option value="messier">Messier</option>'
+				str += '<option value=mechain"">Méchain</option>'
+				str += '<option value="oriani">Oriani</option>'
+				str += '<option value="peiresc">Peiresc</option>'
+				str += '<option value="ptolemee">Ptolémée</option>'
+				document.querySelector("#input_cat").innerHTML = str
+			} else if (selected == "otype") {
+				str = ""
+				str += '<option value="dou">Double star / Étoile Double</option>'
+				str += '<option value="emi">Emission Nebula / Nébuleuse à émission</option>'
+				str += '<option value="gal">Galaxy / Galaxie</option>'
+				str += '<option value="glo">Globular Cluster / Amas Globulaire</option>'
+				str += '<option value="clu">Open Cluster / Amas Ouvert</option>'
+				str += '<option value="pla">Planetary Nebula / Nébuleuse Planétaire</option>'
+				str += '<option value="ref">Reflection Nebula / Nébuleuse à réflexion</option>'
+				str += '<option value="sup">Supernova remnant / Reste de Supernova</option>'
+				document.querySelector("#input_cat").innerHTML = str
+			}else{
+				str = ""
+				document.querySelector("#input_cat").innerHTML = str
+			}
+		}
+
+		let search = () => {
+			let selected = select_type.options[select_type.selectedIndex].value
+			let table = document.querySelector("#table")
+
+			if (input_text.value == "" && input_min.value == "" && input_max.value == "" && document.querySelector("#input_cat").innerHTML == "") {
+				axios.get("/galaxies").then(res => {
+					data = res.data.data
+					console.log(data)
+					document.querySelector("#nbItems").innerHTML=data.length
+					let str = ""
+					for (let i = 0; i < data.length; i++) {
+						str += "<tr id='row" + i + "'>" + "<td><b>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+					}
+					table.innerHTML = str
+				})
+			} else if (selected == "messier") {
+				axios.get("/galaxies/messier/" + input_text.value).then(res => {
+					data = res.data.data
+					console.log(data)
+					document.querySelector("#nbItems").innerHTML=data.length
+					let str = ""
+					for (let i = 0; i < data.length; i++) {
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+					}
+					table.innerHTML = str
+				})
+			} else if (selected == "ngc") {
+				axios.get("/galaxies/ngc/" + input_text.value).then(res => {
+					data = res.data.data
+					console.log(data)
+					document.querySelector("#nbItems").innerHTML=data.length
+					let str = ""
+					for (let i = 0; i < data.length; i++) {
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+					}
+					table.innerHTML = str
+				})
+			} else if (selected == "dist") {
+				axios.get("/galaxies/distance/" + input_min.value + "/" + input_max.value).then(res => {
+					data = res.data.data
+					console.log(data)
+					document.querySelector("#nbItems").innerHTML=data.length
+					let str = ""
+					for (let i = 0; i < data.length; i++) {
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+					}
+					table.innerHTML = str
+				})
+			} else if (selected == "mag") {
+				axios.get("/galaxies/magnitude/" + input_min.value + "/" + input_max.value).then(res => {
+					data = res.data.data
+					console.log(data)
+					document.querySelector("#nbItems").innerHTML=data.length
+					let str = ""
+					for (let i = 0; i < data.length; i++) {
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+					}
+					table.innerHTML = str
+				})
+			} else if (selected == "season") {
+				let cat = select_cat.options[select_cat.selectedIndex].value
+				axios.get("/galaxies/season/" + select_cat.options[select_cat.selectedIndex].innerHTML).then(res => {
+					data = res.data.data
+					console.log(data)
+					document.querySelector("#nbItems").innerHTML=data.length
+					let str = ""
+					for (let i = 0; i < data.length; i++) {
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+					}
+					table.innerHTML = str
+				})
+			} else if (selected == "disco") {
+				let cat = select_cat.options[select_cat.selectedIndex].value
+
+				axios.get("/galaxies/discoverer/" + select_cat.options[select_cat.selectedIndex].innerHTML).then(res => {
+					data = res.data.data
+					console.log(data)
+					document.querySelector("#nbItems").innerHTML=data.length
+					let str = ""
+					for (let i = 0; i < data.length; i++) {
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+					}
+					table.innerHTML = str
+				})
+			} else if (selected == "otype") {
+				let cat = select_cat.options[select_cat.selectedIndex].value
+
+				axios.get("/galaxies/object_type/" + select_cat.options[select_cat.selectedIndex].innerHTML).then(res => {
+					data = res.data.data
+					console.log(data)
+					document.querySelector("#nbItems").innerHTML=data.length
+					let str = ""
+					for (let i = 0; i < data.length; i++) {
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+					}
+					table.innerHTML = str
+				})
+			} else if (selected == "right_ascension") {
+				axios.get("/galaxies/right_ascension/" + input_text.value).then(res => {
+					data = res.data.data
+					console.log(data)
+					document.querySelector("#nbItems").innerHTML=data.length
+					let str = ""
+					for (let i = 0; i < data.length; i++) {
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+					}
+					table.innerHTML = str
+				})
+			} else if (selected == "constellation_en") {
+				axios.get("/galaxies/constellation_en/" + input_text.value).then(res => {
+					data = res.data.data
+					console.log(data)
+					document.querySelector("#nbItems").innerHTML=data.length
+					let str = ""
+					for (let i = 0; i < data.length; i++) {
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+					}
+					table.innerHTML = str
+				})
+			} else if (selected == "declinaison") {
+				axios.get("/galaxies/declinaison/" + input_text.value).then(res => {
+					data = res.data.data
+					console.log(data)
+					document.querySelector("#nbItems").innerHTML=data.length
+					let str = ""
+					for (let i = 0; i < data.length; i++) {
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+					}
+					table.innerHTML = str
+				})
+			} else if (selected == "constellation_fr") {
+				axios.get("/galaxies/constellation_fr/" + input_text.value).then(res => {
+					data = res.data.data
+					console.log(data)
+					document.querySelector("#nbItems").innerHTML=data.length
+					let str = ""
+					for (let i = 0; i < data.length; i++) {
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+					}
+					table.innerHTML = str
+				})
+			} else if (selected == "constellation_latin") {
+				axios.get("/galaxies/constellation_latin/" + input_text.value).then(res => {
+					data = res.data.data
+					console.log(data)
+					document.querySelector("#nbItems").innerHTML=data.length
+					let str = ""
+					for (let i = 0; i < data.length; i++) {
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+					}
+					table.innerHTML = str
+				})
+			} else if (selected == "year") {
+				axios.get("/galaxies/year/" + input_min.value + "/" + input_max.value).then(res => {
+					data = res.data.data
+					console.log(data)
+					document.querySelector("#nbItems").innerHTML=data.length
+					let str = ""
+					for (let i = 0; i < data.length; i++) {
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+					}
+					table.innerHTML = str
+				})
+			}
+			else if (selected == "size") {
+				axios.get("/galaxies/size/" + input_text.value).then(res => {
+					data = res.data.data
+					console.log(data)
+					document.querySelector("#nbItems").innerHTML=data.length
+					let str = ""
+					for (let i = 0; i < data.length; i++) {
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+					}
+					table.innerHTML = str
+				})
+			}
+		}
+
+		updatePlaceholder()
+		updateSelection()
+		search()
+	</script>
+</html>
