@@ -1,0 +1,27 @@
+h1 {
+    margin: 15px 5px 5px 30px;
+    font-weight: bold;
+    font-size: 25pt;
+}
+
+.description {
+    margin-left: 30px;
+}
+
+form select {
+    border-radius : 0 0 30px 30px;
+}
+
+table th {
+    color : #626066;
+    background-color: #BAC5E0 !important;
+}
+
+table tr:nth-child(even){
+    background-color: #EFEFF7;
+}
+
+table tr{
+    background-color: white;
+    border: none;
+}
