@@ -12,14 +12,19 @@ form select {
     border-radius : 0 0 30px 30px;
 }
 
+form .btn-primary {
+    background-color: #3B3AA4 !important;
+    border: none;
+}
+
 table {
     border-collapse: collapse;
     border: none;
 }
 
 table th {
-    color : #626066;
-    background-color: #BAC5E0 !important;
+    color : white;
+    background-color: #3B3AA4 !important;
 }
 
 table tr:nth-child(even){
