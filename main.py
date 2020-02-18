@@ -10,7 +10,6 @@ api = Api(app=app)
 messier = Messier()
 
 
-##DEBUT CREATION DES ROUTES 
 
 @api.route("/index")
 class Test(Resource):
@@ -19,13 +18,13 @@ class Test(Resource):
         return make_response(render_template('index.html'), 200,headers)
 
 
-
 @api.route("/galaxies")
 class Test(Resource):
     def get(self):
         res = messier.all()
         print(res)
         return jsonify(res)
+
 
 @api.route("/galaxies/messier/<id>")
 class Test(Resource):
@@ -42,6 +41,7 @@ class Test(Resource):
         print(res)
         return jsonify(res)
 
+
 @api.route("/galaxies/constellation/<category>")
 class Test(Resource):
     def get(self,category):
@@ -49,12 +49,14 @@ class Test(Resource):
         print(res)
         return jsonify(res)
 
+
 @api.route("/galaxies/constellation_en/<category>")
 class Test(Resource):
     def get(self,category):
         res = messier.getByConstellationEN(category)
         print(res)
         return jsonify(res)
+
 
 @api.route("/galaxies/constellation_fr/<category>")
 class Test(Resource):
@@ -71,6 +73,7 @@ class Test(Resource):
         print(res)
         return jsonify(res)
 
+
 @api.route("/galaxies/right_ascension/<category>")
 class Test(Resource):
     def get(self,category):
@@ -78,12 +81,14 @@ class Test(Resource):
         print(res)
         return jsonify(res)
 
+
 @api.route("/galaxies/declinaison/<category>")
 class Test(Resource):
     def get(self,category):
         res = messier.getByDeclinaison(category)
         print(res)
         return jsonify(res)
+
 
 @api.route("/galaxies/discoverer/<category>")
 class Test(Resource):
@@ -108,6 +113,15 @@ class Test(Resource):
         print(res)
         return jsonify(res)
 
+
+@api.route("/galaxies/year/<path:min>/<path:max>")
+class Test(Resource):
+    def get(self,min, max):
+        res = messier.getByYear(min, max)
+        print(res)
+        return jsonify(res)
+
+
 @api.route("/galaxies/magnitude/<path:min>/<path:max>")
 class Test(Resource):
     def get(self,min, max):
@@ -116,17 +130,8 @@ class Test(Resource):
         return jsonify(res)
 
         
-### FIN DES ROUTES
 
 
-
-
-
-
-
-
-
-##Test def
 
     def post(self):
         """
@@ -166,5 +171,5 @@ def shutdown_session(exception=None):
     db_session.remove()
 
 
-# comment
+
 app.run(host="0.0.0.0", port=80, debug=True)

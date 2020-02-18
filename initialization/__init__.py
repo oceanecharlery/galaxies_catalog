@@ -69,6 +69,10 @@ class Messier:
         query = db.select([messier]).where(messier.c.declinaison == category)
         return self.query(query)
 
+    def getByYear(self, min, max) : 
+        query = db.select([messier]).where(messier.c.year.between(min, max))
+        return self.query(query)
+
     def getByMagnitude(self, min, max) : 
         #min = kwargs.get('min', None)
         #max = kwargs.get('max', None)
