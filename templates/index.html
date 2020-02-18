@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+		<link rel="stylesheet" href="./static/styles/index.css" />
 		<style>
 			thead {
 				font-size: 10pt !important;
@@ -16,7 +17,8 @@
 		<title>Catalogue de Messier - API</title>
 	</head>
 	<body>
-		<h1 class="text-center">Catalogue de Messier</h1>
+		<h1>Catalogue Messier</h1>
+		<p class="description">Cette API permet de requêter et filtrer les 110 objets composant le catalogue de Messier par propriété.</p>
 
 		<form>
 			<div class="mx-auto" style="width: 38rem;">
@@ -24,10 +26,10 @@
 					<div class="input-group-prepend">
 						<select class="input-group-text" id="select_type">
 							<option value="messier" selected>
-								Messier (id)
+								Messier (ID)
 							</option>
 							<option value="ngc">
-								NGC (id)
+								NGC (ID)
 							</option>
 							<option value="dist">
 								Distance
@@ -36,7 +38,7 @@
 								Magnitude
 							</option>
 							<option value="otype">
-								Object type
+								Object Type
 							</option>
 							<option value="season">
 								Season
@@ -62,6 +64,9 @@
 							<option value="year">
 								Year of discovery
 							</option>
+							<option value="size">
+								Size
+							</option>
 						</select>
 					</div>
 					<input type="text" class="form-control" id="input_text" />
@@ -78,8 +83,8 @@
 				<div class="card-body">Number of displayed items : <b id="nbItems"></b></div>
 			</div>
 		</form>
-		<table class="table table-striped ">
-			<thead class="thead-dark">
+		<table class="table">
+			<thead>
 				<tr>
 					<th>Messier</th>
 					<th>NGC</th>
@@ -168,8 +173,8 @@
 				input_text.placeholder = "Hair of Berenice"
 			} else if(selected == "constellation_latin") {
 				input_text.placeholder = "Coma Berenices"
-			} else if(selected == "year") {
-				input_text.placeholder = "Exemple : 1779"
+			} else if(selected == "size") {
+				input_text.placeholder = "Exemple : 12,0' x 7,6' "
 			}
 		}
 
@@ -177,7 +182,7 @@
 			let selected = select_type.options[select_type.selectedIndex].value
 
 			if (selected == "messier" || selected == "ngc" || selected == "right_ascension" || selected == "constellation_en" 
-			|| selected == "declinaison" || selected == "constellation_fr" || selected == "constellation_latin") {
+			|| selected == "declinaison" || selected == "constellation_fr" || selected == "constellation_latin" || selected == "size") {
 				document.querySelector("#input_min").style.display = "none"
 				document.querySelector("#input_max").style.display = "none"
 				document.querySelector("#input_text").style.display = "block"
@@ -399,6 +404,18 @@
 				})
 			} else if (selected == "year") {
 				axios.get("/galaxies/year/" + input_min.value + "/" + input_max.value).then(res => {
+					data = res.data.data
+					console.log(data)
+					document.querySelector("#nbItems").innerHTML=data.length
+					let str = ""
+					for (let i = 0; i < data.length; i++) {
+						str += "<tr id='row" + i + "'>" + "<td>" + data[i].messier + "</td>" + "<td>" + data[i].ngc + "</td>" + "<td>" + data[i].object_type + "</td>" + "<td>" + data[i].season + "</td>" + "<td>" + data[i].magnitude + "</td>" + "<td>" + data[i].constellation_en + "</td>" + "<td>" + data[i].constellation_fr + "</td>" + "<td>" + data[i].constellation_latin + "</td>" + "<td>" + data[i].right_ascension + "</td>" + "<td>" + data[i].declinaison + "</td>" + "<td>" + data[i].distance + "</td>" + "<td>" + data[i].size + "</td>" + "<td>" + data[i].discoverer + "</td>" + "<td>" + data[i].year + "</td>" + '<td><a target="_blank" href="' + data[i].image_url_1 + '">Img</a></td>' + '<td><a target="_blank" href="' + data[i].image_url_2 + '">Download</a></td>' + "<td>" + data[i].constellation + "</td>" + "</tr>"
+					}
+					table.innerHTML = str
+				})
+			}
+			else if (selected == "size") {
+				axios.get("/galaxies/size/" + input_text.value).then(res => {
 					data = res.data.data
 					console.log(data)
 					document.querySelector("#nbItems").innerHTML=data.length

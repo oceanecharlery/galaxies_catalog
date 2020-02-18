@@ -1,7 +1,6 @@
 from flask import Flask, render_template, jsonify, make_response, request 
 from flask_restplus import Api, Resource
-
-#from initialization import Objects 
+ 
 from initialization import engine
 from initialization import Messier, db_session
 
@@ -12,14 +11,14 @@ messier = Messier()
 
 
 @api.route("/index")
-class Test(Resource):
+class Messier(Resource):
     def get(self):
         headers = {'content-type': 'text/html'}
         return make_response(render_template('index.html'), 200,headers)
 
 
 @api.route("/galaxies")
-class Test(Resource):
+class Messier(Resource):
     def get(self):
         res = messier.all()
         print(res)
@@ -27,7 +26,7 @@ class Test(Resource):
 
 
 @api.route("/galaxies/messier/<id>")
-class Test(Resource):
+class Messier(Resource):
     def get(self,id):
         res = messier.getByMessier(id)
         print(res)
@@ -35,7 +34,7 @@ class Test(Resource):
 
 
 @api.route("/galaxies/ngc/<ngc>")
-class Test(Resource):
+class Messier(Resource):
     def get(self,ngc):
         res = messier.getByNGC(ngc)
         print(res)
@@ -43,7 +42,7 @@ class Test(Resource):
 
 
 @api.route("/galaxies/constellation/<category>")
-class Test(Resource):
+class Messier(Resource):
     def get(self,category):
         res = messier.getByConstellation(category)
         print(res)
@@ -51,7 +50,7 @@ class Test(Resource):
 
 
 @api.route("/galaxies/constellation_en/<category>")
-class Test(Resource):
+class Messier(Resource):
     def get(self,category):
         res = messier.getByConstellationEN(category)
         print(res)
@@ -59,7 +58,7 @@ class Test(Resource):
 
 
 @api.route("/galaxies/constellation_fr/<category>")
-class Test(Resource):
+class Messier(Resource):
     def get(self,category):
         res = messier.getByConstellationFR(category)
         print(res)
@@ -67,7 +66,7 @@ class Test(Resource):
 
 
 @api.route("/galaxies/constellation_latin/<category>")
-class Test(Resource):
+class Messier(Resource):
     def get(self,category):
         res = messier.getByConstellationLATIN(category)
         print(res)
@@ -75,7 +74,7 @@ class Test(Resource):
 
 
 @api.route("/galaxies/right_ascension/<category>")
-class Test(Resource):
+class Messier(Resource):
     def get(self,category):
         res = messier.getByRightAscension(category)
         print(res)
@@ -83,7 +82,7 @@ class Test(Resource):
 
 
 @api.route("/galaxies/declinaison/<category>")
-class Test(Resource):
+class Messier(Resource):
     def get(self,category):
         res = messier.getByDeclinaison(category)
         print(res)
@@ -91,7 +90,7 @@ class Test(Resource):
 
 
 @api.route("/galaxies/discoverer/<category>")
-class Test(Resource):
+class Messier(Resource):
     def get(self,category):
         res = messier.getByDiscoverer(category)
         print(res)
@@ -99,7 +98,7 @@ class Test(Resource):
 
 
 @api.route("/galaxies/object_type/<path:category>")
-class Test(Resource):
+class Messier(Resource):
     def get(self,category):
         res = messier.getByObjectType(category)
         print(res)
@@ -107,7 +106,7 @@ class Test(Resource):
 
 
 @api.route("/galaxies/season/<path:category>")
-class Test(Resource):
+class Messier(Resource):
     def get(self,category):
         res = messier.getBySeason(category)
         print(res)
@@ -115,7 +114,15 @@ class Test(Resource):
 
 
 @api.route("/galaxies/year/<path:min>/<path:max>")
-class Test(Resource):
+class Messier(Resource):
+    def get(self,min, max):
+        res = messier.getByYear(min, max)
+        print(res)
+        return jsonify(res)
+
+
+@api.route("/galaxies/distance/<path:min>/<path:max>")
+class Messier(Resource):
     def get(self,min, max):
         res = messier.getByYear(min, max)
         print(res)
@@ -123,12 +130,19 @@ class Test(Resource):
 
 
 @api.route("/galaxies/magnitude/<path:min>/<path:max>")
-class Test(Resource):
+class Messier(Resource):
     def get(self,min, max):
         res = messier.getByMagnitude(min, max)
         print(res)
         return jsonify(res)
 
+
+@api.route("/galaxies/size/<path:size>")
+class Messier(Resource):
+    def get(self, size):
+        res = messier.getBySize(size)
+        print(res)
+        return jsonify(res)
         
 
 

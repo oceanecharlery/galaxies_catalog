@@ -74,7 +74,13 @@ class Messier:
         return self.query(query)
 
     def getByMagnitude(self, min, max) : 
-        #min = kwargs.get('min', None)
-        #max = kwargs.get('max', None)
         query = db.select([messier]).where(messier.c.magnitude.between(min, max))
         return self.query(query)
+
+    def getByDistance(self, min, max) : 
+        query = db.select([messier]).where(messier.c.distance.between(min, max))
+        return self.query(query)
+    
+    def getBySize(self, size) : 
+        query = db.select([messier]).where(messier.c.size == size)
+        return self.query(query)     
